@@ -1,36 +1,29 @@
-#!/usr/bin/node
-const argv = process.argv;
-const urlFilm = 'https://swapi-api.hbtn.io/api/films/';
-const urlMovie = `${urlFilm}${argv[2]}/`;
+#!/usr/bin/python3
+"""2D matrix rotation module.
+"""
 
-const request = require('request');
 
-request(urlMovie, function (error, response, body) {
-  if (error == null) {
-    const fbody = JSON.parse(body);
-    const characters = fbody.characters;
-
-    if (characters && characters.length > 0) {
-      const limit = characters.length;
-      CharRequest(0, characters[0], characters, limit);
-    }
-  } else {
-    console.log(error);
-  }
-});
-
-function CharRequest (idx, url, characters, limit) {
-  if (idx === limit) {
-    return;
-  }
-  request(url, function (error, response, body) {
-    if (!error) {
-      const rbody = JSON.parse(body);
-      console.log(rbody.name);
-      idx++;
-      CharRequest(idx, characters[idx], characters, limit);
-    } else {
-      console.error('error:', error);
-    }
-  });
-}
+def rotate_2d_matrix(matrix):
+    """Rotates an m by n 2D matrix in place.
+    """
+    if type(matrix) != list:
+        return
+    if len(matrix) <= 0:
+        return
+    if not all(map(lambda x: type(x) == list, matrix)):
+        return
+    rows = len(matrix)
+    cols = len(matrix[0])
+    if not all(map(lambda x: len(x) == cols, matrix)):
+        return
+    c, r = 0, rows - 1
+    for i in range(cols * rows):
+        if i % rows == 0:
+            matrix.append([])
+        if r == -1:
+            r = rows - 1
+            c += 1
+        matrix[-1].append(matrix[r][c])
+        if c == cols - 1 and r >= -1:
+            matrix.pop(r)
+        r -= 1
